@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.xml.crypto.Data;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class BookRepository {
@@ -23,13 +24,19 @@ public class BookRepository {
         List<Book>bookList=findAll();
         if (author != null && book != null)
         {
+            book.getAuthors().remove(author);
             book.getAuthors().add(author);
         }
         bookList.removeIf(i-> {
-            assert book != null;
             return i.getIsbn().equals(book.getIsbn());
         });
         bookList.add(book);
         return author;
+    }
+
+    public Map<String,List<String>> listGenres()
+    {
+
+        return DataHolder.map;
     }
 }

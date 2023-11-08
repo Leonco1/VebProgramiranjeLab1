@@ -7,7 +7,10 @@ import mk.finki.ukim.mk.lab.repository.BookRepository;
 import mk.finki.ukim.mk.lab.service.BookService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -23,7 +26,6 @@ public class BookServiceImpl implements BookService {
     public Author addAuthorToBook(Long authorId, String isbn) {
         Author author=authorRepository.findById(authorId).orElse(null);
         Book book=bookRepository.findByIsbn(isbn);
-
        return bookRepository.addAuthorToBook(author,book);
 
     }
@@ -32,6 +34,22 @@ public class BookServiceImpl implements BookService {
     public Book findBookByIsbn(String isbn) {
         return bookRepository.findByIsbn(isbn);
     }
+
+    @Override
+    public Map<String, List<String>> listGenre(List<Book>list) {
+       return bookRepository.listGenres();
+
+    }
+
+    @Override
+    public List<Book> getYears(Integer year) {
+       return listBooks().stream().filter(book -> {
+            Integer yearr=book.getYear();
+            return yearr.equals(year);
+        }).collect(Collectors.toList());
+
+    }
+
 
     public BookServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
         this.authorRepository = authorRepository;

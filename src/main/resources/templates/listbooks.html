@@ -18,6 +18,17 @@ xmlns:th="http://www.thymeleaf.org">
 </header>
 <main>
     <h2>Choose book:</h2>
+    <form th:method="GET" th:action="@{/listbooks}">
+        <div>
+            <th:block>
+                <label for="year">Search</label>
+                <input type="text" id="year" name="searchTerm" placeholder="Enter year">
+                <button type="submit">Search</button>
+            </th:block>
+        </div>
+    </form>
+
+
     <form th:method="POST" th:action="@{/listbooks}">
     <!-- Display radio buttons for each book,
             the value should be the isbn 
@@ -29,6 +40,14 @@ xmlns:th="http://www.thymeleaf.org">
     <input type='submit' value='Submit'>
 
     </form>
+    <th:block th:each="genre:${genres}">
+        <ul>
+            <h1 th:text="${genre.getKey()}"></h1>
+            <li th:each="title:${genre.getValue()}" th:text="${title}">
+            </li>
+        </ul>
+
+    </th:block>
 </main>
 </body>
 </html>

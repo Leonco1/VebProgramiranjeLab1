@@ -25,4 +25,12 @@ public class AuthorServiceImpl implements AuthorService {
     public Author findById(Long id) throws NotFoundException {
         return authorRepository.findById(id).orElseThrow(NotFoundException::new);
     }
+
+    @Override
+    public void Add(Long id) {
+        Author a=authorRepository.findById(id).get();
+        authorRepository.findAll().remove(a);
+        authorRepository.findAll().add(a);
+
+    }
 }

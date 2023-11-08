@@ -6,16 +6,21 @@ import mk.finki.ukim.mk.lab.model.Book;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Component
 public class DataHolder {
     public static List<Author> authors;
     public static List<Book> books;
+    public static Map<String,List<String>>map;
     @PostConstruct
     public void init()
     {
         authors=new ArrayList<>();
         books=new ArrayList<>();
+        map=new HashMap<>();
         authors.add(new Author(1L,"George","Martin","Mylife"));
         authors.add(new Author(2L,"JK","Rowling","HarryPotter"));
         authors.add(new Author(3L,"George","Orwell","asdsadsad"));
@@ -48,6 +53,14 @@ public class DataHolder {
         books.add(new Book("1223","The Unbearable Lightness of Being","Novel",1984,authors3));
         books.add(new Book("1111","1984","Dystopia",1949,authors4));
         books.add(new Book("11113","The Trial","Novel",1925,authors5));
+
+        for(Book book:books)
+        {
+            map.putIfAbsent(book.getGenre(),new ArrayList<>());
+            map.computeIfPresent(book.getGenre(),(s, strings) -> {
+                strings.add(book.getTitle());
+            return strings;});
+        }
     }
 
 }

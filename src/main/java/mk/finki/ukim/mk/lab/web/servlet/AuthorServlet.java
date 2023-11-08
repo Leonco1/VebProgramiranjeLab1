@@ -47,12 +47,7 @@ public class AuthorServlet extends HttpServlet {
         HttpSession session=req.getSession();
         session.setAttribute("id",id);
         String isbn=(String)session.getAttribute("isbn");
-        try {
-            bookService.findBookByIsbn(isbn).getAuthors().add(authorService.findById(id));
-        } catch (NotFoundException e) {
-            e.getMessage();
-        }
-
+            bookService.addAuthorToBook(id,isbn);
         resp.sendRedirect("/bookdetails");
     }
 }
