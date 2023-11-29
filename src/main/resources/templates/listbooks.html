@@ -42,9 +42,7 @@ xmlns:th="http://www.thymeleaf.org">
             <a th:href="@{'/books/edit-form/{id}' (id=${book.getId()})}">
                 <button th:class="form-container">Edit Book</button>
             </a>
-            <a href="books/add-form">
-                <button th:class="form-container">Add Book</button>
-            </a>
+
             <form  th:action="@{'/books/delete/{id}' (id=${book.getId()})}"
                   th:method="POST">
                 <button type="submit">
@@ -58,6 +56,9 @@ xmlns:th="http://www.thymeleaf.org">
             </form>
 
         </th:block>
+        <a href="books/add-form">
+            <button th:class="form-container">Add Book</button>
+        </a>
     </div>
     <th:block th:each="genre:${genres}">
         <ul>

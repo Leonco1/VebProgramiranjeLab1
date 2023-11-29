@@ -7,6 +7,7 @@ import mk.finki.ukim.mk.lab.service.AuthorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -22,8 +23,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author findById(Long id) throws NotFoundException {
-        return authorRepository.findById(id).orElseThrow(NotFoundException::new);
+    public Optional<Author> findById(Long id)  {
+        return authorRepository.findById(id);
     }
 
     @Override
@@ -32,5 +33,15 @@ public class AuthorServiceImpl implements AuthorService {
         authorRepository.findAll().remove(a);
         authorRepository.findAll().add(a);
 
+    }
+
+    @Override
+    public Optional<Author> Save(Long id, String name, String surname, String biography) {
+        return authorRepository.Save(id,name,surname,biography);
+    }
+
+    @Override
+    public void DeleteById(Long Id) {
+        this.authorRepository.DeleteById(Id);
     }
 }

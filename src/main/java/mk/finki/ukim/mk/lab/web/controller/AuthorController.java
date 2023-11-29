@@ -4,19 +4,19 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import mk.finki.ukim.mk.lab.model.Author;
+import mk.finki.ukim.mk.lab.model.Book;
 import mk.finki.ukim.mk.lab.service.AuthorService;
 import mk.finki.ukim.mk.lab.service.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -53,4 +53,38 @@ public String listAuthors(HttpServletRequest req, Model model)
         return "redirect:/bookdetails";
 
     }
+
+    @GetMapping("/edit-author-form/{id}")
+    public String EditAuthorPage(@PathVariable Long id, Model model)
+    {
+        List<Author> authors=this.authorService.listAuthors();
+        model.addAttribute("authors",authors);
+        if(this.authorService.findById(id).isPresent())
+        {
+            Author author=this.authorService.findById(id).get();
+            model.addAttribute("author",author);
+            return "add-author";
+        }
+        return "redirect:/author?error=NotFoundException";
+    }
+    @PostMapping("/delete-author/{id}")
+    public String deleteAuthor(@PathVariable Long id)
+    {
+        this.authorService.DeleteById(id);
+        return "redirect:/author";
+    }
+    @GetMapping("/add-author-form")
+    public String AddAuthorForm(Model model)
+    {
+        List<Author>authors=this.authorService.listAuthors();
+        model.addAttribute("authors",authors);
+        return "add-author";
+    }
+    @PostMapping("/add-author")
+    public String SaveAuthor(@RequestParam Long Id, @RequestParam String name, @RequestParam String surname, @RequestParam String biography )
+    {
+        this.authorService.Save(Id,name,surname,biography);
+        return "redirect:/author";
+    }
+
 }
