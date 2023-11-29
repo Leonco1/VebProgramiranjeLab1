@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet(urlPatterns = "/listbooks")
+@WebServlet(urlPatterns = "/servlet/listbooks")
 public class BookListServlet extends HttpServlet {
     private final SpringTemplateEngine springTemplateEngine;
     private  final BookService bookService;

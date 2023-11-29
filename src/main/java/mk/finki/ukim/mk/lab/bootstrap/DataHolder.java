@@ -3,6 +3,7 @@ package mk.finki.ukim.mk.lab.bootstrap;
 import jakarta.annotation.PostConstruct;
 import mk.finki.ukim.mk.lab.model.Author;
 import mk.finki.ukim.mk.lab.model.Book;
+import mk.finki.ukim.mk.lab.model.BookStore;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,12 +16,15 @@ public class DataHolder {
     public static List<Author> authors;
     public static List<Book> books;
     public static Map<String,List<String>>map;
+    public static List<BookStore>bookStores;
     @PostConstruct
     public void init()
     {
         authors=new ArrayList<>();
         books=new ArrayList<>();
         map=new HashMap<>();
+        bookStores=new ArrayList<>();
+
         authors.add(new Author(1L,"George","Martin","Mylife"));
         authors.add(new Author(2L,"JK","Rowling","HarryPotter"));
         authors.add(new Author(3L,"George","Orwell","asdsadsad"));
@@ -47,12 +51,21 @@ public class DataHolder {
         ArrayList<Author> authors5 = new ArrayList<>();
         authors5.add(new Author(14L, "Isabella", "Harris", "Book 9"));
         authors5.add(new Author(15L, "Jack", "Lee", "Book 10"));
+        bookStores.add(new BookStore(1L, "Store1", "City1", "Address1"));
+        bookStores.add(new BookStore(2L, "Store2", "City2", "Address2"));
+        bookStores.add(new BookStore(3L, "Store3", "City3", "Address3"));
+        bookStores.add(new BookStore(4L, "Store4", "City4", "Address4"));
+        bookStores.add(new BookStore(5L, "Store5", "City5", "Address5"));
 
-        books.add(new Book("123","Harry Potter","Magic",1990,authors1));
-        books.add(new Book("1234","A song Of Ice and Fire","Fantasy",1995,authors2));
-        books.add(new Book("1223","The Unbearable Lightness of Being","Novel",1984,authors3));
-        books.add(new Book("1111","1984","Dystopia",1949,authors4));
-        books.add(new Book("11113","The Trial","Novel",1925,authors5));
+
+        books.add(new Book("123","Harry Potter","Magic",1990,authors1,bookStores.get(1)));
+        books.add(new Book("1234","A song Of Ice and Fire","Fantasy",1995,authors2,bookStores.get(0)));
+        books.add(new Book("1223","The Unbearable Lightness of Being","Novel",1984,authors3,bookStores.get(3)));
+        books.add(new Book("1111","1984","Dystopia",1949,authors4,bookStores.get(4)));
+        books.add(new Book("11113","The Trial","Novel",1925,authors5,bookStores.get(2)));
+
+
+
 
         for(Book book:books)
         {

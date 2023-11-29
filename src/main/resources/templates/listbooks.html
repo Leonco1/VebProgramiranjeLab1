@@ -9,16 +9,22 @@ xmlns:th="http://www.thymeleaf.org">
             width: 800px;
             margin: auto;
         }
+        button
+        {
+            font-size: 13px;
+            padding: 2px;
+        }
+
     </style>
 </head>
 <body>
-<a th:href="@{/listbooks}"></a>
+<a th:href="@{/books}"></a>
 <header>
     <h1>Welcome to My Book Store</h1>
 </header>
 <main>
     <h2>Choose book:</h2>
-    <form th:method="GET" th:action="@{/listbooks}">
+    <form th:method="GET" th:action="@{/books}">
         <div>
             <th:block>
                 <label for="year">Search</label>
@@ -27,26 +33,41 @@ xmlns:th="http://www.thymeleaf.org">
             </th:block>
         </div>
     </form>
+    <div>
 
-
-    <form th:method="POST" th:action="@{/listbooks}">
     <!-- Display radio buttons for each book,
-            the value should be the isbn 
+            the value should be the isbn
             and the displayed text should be Title: <bookTitle>, Genre:<genre>, Year: <year> -->
         <th:block th:each="book: ${books}">
+            <a th:href="@{'/books/edit-form/{id}' (id=${book.getId()})}">
+                <button th:class="form-container">Edit Book</button>
+            </a>
+            <a href="books/add-form">
+                <button th:class="form-container">Add Book</button>
+            </a>
+            <form  th:action="@{'/books/delete/{id}' (id=${book.getId()})}"
+                  th:method="POST">
+                <button type="submit">
+                   Delete
+                </button>
+            </form>
+            <form  th:method="POST" th:action="@{/books}">
             <input type="radio" name="bookIsbn" th:value="${book.getIsbn()}" th:id="${book.getIsbn()}"/>
-            <label th:for="'book' + ${book.getIsbn()}" th:text="'Title: '+ ${book.getTitle()}+' '+'Genre: '+${book.getGenre()}+' '+'Year: '+${book.getYear()}"></label><br/>
-        </th:block>
-    <input type='submit' value='Submit'>
+            <label th:for="'book' + ${book.getIsbn()}" th:text="'Title: '+ ${book.getTitle()}+' '+'Genre: '+${book.getGenre()}+' '+'Year: '+${book.getYear()}+' '+'Book Store: '+${book.getBookStore().getName()}"></label><br/>
+                <button type="submit">Submit</button>
+            </form>
 
-    </form>
+        </th:block>
+    </div>
     <th:block th:each="genre:${genres}">
         <ul>
             <h1 th:text="${genre.getKey()}"></h1>
             <li th:each="title:${genre.getValue()}" th:text="${title}">
             </li>
         </ul>
-
+    </th:block>
+    <th:block th:if="${hasError}">
+        <div th:text="${error}" class="text-danger"></div>
     </th:block>
 </main>
 </body>

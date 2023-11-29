@@ -5,6 +5,7 @@ import mk.finki.ukim.mk.lab.model.Book;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface BookService {
     List<Book> listBooks();
@@ -12,4 +13,8 @@ public interface BookService {
     Book findBookByIsbn(String isbn);
     Map<String,List<String>>listGenre(List<Book>list);
     List<Book>getYears(Integer year);
+    public Optional<Book> Save(String title, String isbn, String genre, Integer year, Long Id);
+    public Optional<Book> findById(Long id);
+    public void DeleteById(Long id);
+
 }

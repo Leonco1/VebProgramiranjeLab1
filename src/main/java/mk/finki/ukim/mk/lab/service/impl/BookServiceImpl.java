@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +41,11 @@ public class BookServiceImpl implements BookService {
        return bookRepository.listGenres();
 
     }
+    @Override
+    public void DeleteById(Long id)
+    {
+        this.bookRepository.DeleteById(id);
+    }
 
     @Override
     public List<Book> getYears(Integer year) {
@@ -48,6 +54,16 @@ public class BookServiceImpl implements BookService {
             return yearr.equals(year);
         }).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public Optional<Book> Save(String title, String isbn, String genre, Integer year, Long Id) {
+        return this.bookRepository.Save(title,isbn,genre,year,Id);
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        return this.bookRepository.findById(id);
     }
 
 

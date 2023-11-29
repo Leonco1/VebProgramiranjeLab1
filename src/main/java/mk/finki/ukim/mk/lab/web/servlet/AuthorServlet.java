@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import mk.finki.ukim.mk.lab.model.NotFoundException;
 import mk.finki.ukim.mk.lab.service.AuthorService;
 import mk.finki.ukim.mk.lab.service.BookService;
 import org.thymeleaf.context.WebContext;
@@ -16,7 +15,7 @@ import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/author")
+@WebServlet(urlPatterns = "/servlet/author")
 public class AuthorServlet extends HttpServlet {
     private  final SpringTemplateEngine springTemplateEngine;
     private final BookService bookService;

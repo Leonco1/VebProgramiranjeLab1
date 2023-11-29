@@ -1,7 +1,7 @@
 package mk.finki.ukim.mk.lab.service;
 
 import mk.finki.ukim.mk.lab.model.Author;
-import mk.finki.ukim.mk.lab.model.NotFoundException;
+import mk.finki.ukim.mk.lab.model.exceptions.NotFoundException;
 
 import java.util.List;
 
