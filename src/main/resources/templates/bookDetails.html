@@ -12,7 +12,7 @@
     <h2>Authors:</h2>
     <th:block>
     <ul th:each="author:${authors}">
-        <li th:text="${author.getName()}+' '+${author.getSurname()}"></li>
+        <li th:text="${author.getAuthorFullname()}"></li>
     </ul>
     </th:block>
 </section>

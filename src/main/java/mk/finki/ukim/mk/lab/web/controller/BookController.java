@@ -30,7 +30,7 @@ public class BookController {
         String year = (req.getParameter("searchTerm"));
         if (year == "" || year == null) {
             model.addAttribute("books", bookService.listBooks());
-            model.addAttribute("genres", bookService.listGenre(bookService.listBooks()));
+            //model.addAttribute("genres", bookService.listGenre(bookService.listBooks()));
         } else {
             Integer yearr = Integer.valueOf(year);
             List<Book> bookList = bookService.getYears(yearr);
@@ -68,8 +68,7 @@ public class BookController {
     }
     @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id)
-    {
-        this.bookService.DeleteById(id);
+    {this.bookService.DeleteById(id);
     return "redirect:/books";
     }
   @GetMapping("/add-form")

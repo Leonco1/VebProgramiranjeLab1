@@ -4,76 +4,159 @@ import jakarta.annotation.PostConstruct;
 import mk.finki.ukim.mk.lab.model.Author;
 import mk.finki.ukim.mk.lab.model.Book;
 import mk.finki.ukim.mk.lab.model.BookStore;
+
+import mk.finki.ukim.mk.lab.repository.jpa.AuthorRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.BookRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.BookStoreRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class DataHolder {
-    public static List<Author> authors;
-    public static List<Book> books;
-    public static Map<String,List<String>>map;
-    public static List<BookStore>bookStores;
-    @PostConstruct
-    public void init()
-    {
-        authors=new ArrayList<>();
-        books=new ArrayList<>();
-        map=new HashMap<>();
-        bookStores=new ArrayList<>();
 
-        authors.add(new Author(1L,"George","Martin","Mylife"));
-        authors.add(new Author(2L,"JK","Rowling","HarryPotter"));
-        authors.add(new Author(3L,"George","Orwell","asdsadsad"));
-        authors.add(new Author(4L,"William","Shakespear","Romeo"));
-        authors.add(new Author(5L,"Stephen","King","IT"));
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final BookStoreRepository bookStoreRepository;
 
-
-        ArrayList<Author> authors1 = new ArrayList<>();
-        authors1.add(new Author(6L, "John", "Smith", "Book 1"));
-        authors1.add(new Author(7L, "Jane", "Doe", "Book 2"));
-
-        ArrayList<Author> authors2 = new ArrayList<>();
-        authors2.add(new Author(8L, "Alice", "Johnson", "Book 3"));
-        authors2.add(new Author(9L, "Bob", "Williams", "Book 4"));
-
-        ArrayList<Author> authors3 = new ArrayList<>();
-        authors3.add(new Author(10L, "Eleanor", "Davis", "Book 5"));
-        authors3.add(new Author(11L, "Frank", "Brown", "Book 6"));
-
-        ArrayList<Author> authors4 = new ArrayList<>();
-        authors4.add(new Author(12L, "Grace", "Miller", "Book 7"));
-        authors4.add(new Author(13L, "Henry", "White", "Book 8"));
-
-        ArrayList<Author> authors5 = new ArrayList<>();
-        authors5.add(new Author(14L, "Isabella", "Harris", "Book 9"));
-        authors5.add(new Author(15L, "Jack", "Lee", "Book 10"));
-        bookStores.add(new BookStore(1L, "Store1", "City1", "Address1"));
-        bookStores.add(new BookStore(2L, "Store2", "City2", "Address2"));
-        bookStores.add(new BookStore(3L, "Store3", "City3", "Address3"));
-        bookStores.add(new BookStore(4L, "Store4", "City4", "Address4"));
-        bookStores.add(new BookStore(5L, "Store5", "City5", "Address5"));
-
-
-        books.add(new Book("123","Harry Potter","Magic",1990,authors1,bookStores.get(1)));
-        books.add(new Book("1234","A song Of Ice and Fire","Fantasy",1995,authors2,bookStores.get(0)));
-        books.add(new Book("1223","The Unbearable Lightness of Being","Novel",1984,authors3,bookStores.get(3)));
-        books.add(new Book("1111","1984","Dystopia",1949,authors4,bookStores.get(4)));
-        books.add(new Book("11113","The Trial","Novel",1925,authors5,bookStores.get(2)));
-
-
-
-
-        for(Book book:books)
-        {
-            map.putIfAbsent(book.getGenre(),new ArrayList<>());
-            map.computeIfPresent(book.getGenre(),(s, strings) -> {
-                strings.add(book.getTitle());
-            return strings;});
-        }
+    public DataHolder(BookRepository bookRepository, AuthorRepository authorRepository, BookStoreRepository bookStoreRepository) {
+        this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
+        this.bookStoreRepository = bookStoreRepository;
     }
 
+    @PostConstruct
+    public void init(){
+        List<Author> authors = new ArrayList<>();
+        List<Book> books = new ArrayList<>();
+        List<BookStore> bookStores = new ArrayList<>();
+
+        if (authorRepository.count() == 0){
+            authors.add(new Author(
+                    "William",
+                    "Shakespeare",
+                    "William Shakespeare is one of the most celebrated playwrights and poets in English literature. He was born in Stratford-upon-Avon, England. His works, including plays like Hamlet,Romeo and Juliet,\" and \"Macbeth,\" have had a profound impact on the world of literature and drama"
+            ));
+            authors.add(new Author(
+                    "George R.R.",
+                    "Martin",
+                    "George R.R. Martin, an American author, is widely known for his epic fantasy series \"A Song of Ice and Fire,\" which inspired the television series Game of Thrones. Born in Bayonne, New Jersey, Martin is celebrated for his intricate plots and complex characters in the fantasy genre."
+            ));
+
+            authors.add(new Author(
+                    "J.R.R.",
+                    "Tolkien",
+                    "J.R.R. Tolkien, an English writer, philologist, and professor, is considered the father of modern fantasy literature. Born in Bloemfontein, South Africa, his iconic works, including \"The Hobbit\" and \"The Lord of the Rings,\" have had a profound and enduring impact on the fantasy genre and literature as a whole."
+            ));
+            authors.add(new Author(
+                    "Mark",
+                    "Twain",
+                    "Mark Twain, born Samuel Clemens in Florida, Missouri, was an American author and humorist. His classic works, including The Adventures of Tom Sawyer and Adventures of Huckleberry Finn,\" reflect his keen observations of American society and human nature."
+            ));
+
+            authors.add(new Author(
+                    "J.K.",
+                    "Rowling",
+                    "J.K. Rowling, a British author, gained worldwide fame for her Harry Potter series. Born in Yate, Gloucestershire, her magical world of wizards and muggles has captivated readers of all ages, making her one of the best-selling authors in history."
+            ));
+
+            authorRepository.saveAll(authors);
+        }
+
+        if (bookStoreRepository.count() == 0){
+            bookStores.add(new BookStore(
+                    "Prosvetno Delo",
+                    "Prilep",
+                    "Address 1"
+            ));
+            bookStores.add(new BookStore(
+                    "Book Haven",
+                    "New York City",
+                    "123 Main Street"
+            ));
+
+            bookStores.add(new BookStore(
+                    "Paper Trails",
+                    "Los Angeles",
+                    "456 Oak Avenue"
+            ));
+
+            bookStores.add(new BookStore(
+                    "Literatura",
+                    "Veles",
+                    "Address 4"
+            ));
+            bookStores.add(new BookStore(
+                    "Akademska Kniga",
+                    "Skopje",
+                    "Address 5"
+            ));
+            bookStoreRepository.saveAll(bookStores);
+        }
+
+        if (bookRepository.count() == 0){
+            authors = authorRepository.findAll();
+            bookStores=bookStoreRepository.findAll();
+            books.add(new Book(
+                    "978-0-316-03859-9",
+                    "Hamlet",
+                    "Tragedy",
+                    1600,
+                    new ArrayList<Author>(Arrays.asList(authors.get(0),authors.get(1))),
+                    bookStores.get(0)
+            ));
+            books.add(new Book(
+                    "978-1-250-04657-8",
+                    "Pride and Prejudice",
+                    "Romance",
+                    1816,
+                    new ArrayList<Author>(Arrays.asList(authors.get(1),authors.get(2))),
+                    bookStores.get(1)
+            ));
+            books.add(new Book(
+                    "978-0-553-21361-4",
+                    "Great Expectations",
+                    "Bildungsroman",
+                    1861,
+                    new ArrayList<Author>(Arrays.asList(authors.get(2),authors.get(3))),
+                    bookStores.get(2)
+            ));
+            books.add(new Book(
+                    "978-0-06-112008-4",
+                    "Murder on the Orient Express",
+                    "Detective Fiction",
+                    1934,
+                    new ArrayList<Author>(Arrays.asList(authors.get(3),authors.get(4))),
+                    bookStores.get(3)
+            ));
+            books.add(new Book(
+                    "978-0-451-52478-1",
+                    "One Hundred Years of Solitude",
+                    "Magical Realism",
+                    1967,
+                    new ArrayList<Author>(Collections.singletonList(authors.get(4))),
+                    bookStores.get(4)
+            ));
+            books.add(new Book(
+                    "978-0-451-52478-2",
+                    "One Hundred Years of Solitude2",
+                    "Magical Realism",
+                    1967,
+                    new ArrayList<Author>(Collections.singletonList(authors.get(1))),
+                    bookStores.get(0)
+            ));
+            books.add(new Book(
+                    "978-0-451-52478-3",
+                    "One Hundred Years of Solitude3",
+                    "Magical Realism",
+                    1600,
+                    new ArrayList<Author>(Collections.singletonList(authors.get(2))),
+                    bookStores.get(3)
+            ));
+            bookRepository.saveAll(books);
+        }
+    }
 }

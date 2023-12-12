@@ -16,6 +16,7 @@ import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,7 +40,6 @@ public String listAuthors(HttpServletRequest req, Model model)
     model.addAttribute("authors",authorService.listAuthors());
     String isbn= (String) req.getSession().getAttribute("isbn");
     model.addAttribute("isbn",isbn);
-    model.addAttribute("authors",authorService.listAuthors());
     return "authorList";
 
 }
@@ -81,9 +81,9 @@ public String listAuthors(HttpServletRequest req, Model model)
         return "add-author";
     }
     @PostMapping("/add-author")
-    public String SaveAuthor(@RequestParam Long Id, @RequestParam String name, @RequestParam String surname, @RequestParam String biography )
+    public String SaveAuthor(@RequestParam Long Id, @RequestParam String name, @RequestParam String surname, @RequestParam String biography,@RequestParam LocalDate localDate)
     {
-        this.authorService.Save(Id,name,surname,biography);
+        this.authorService.Save(Id,name,surname,biography,localDate);
         return "redirect:/author";
     }
 

@@ -36,7 +36,7 @@ public class BookListServlet extends HttpServlet {
         if(year==""||year==null )
         {
             context.setVariable("books",bookService.listBooks());
-            context.setVariable("genres",bookService.listGenre(bookService.listBooks()));
+           // context.setVariable("genres",bookService.listGenre(bookService.listBooks()));
         }
         else
         {

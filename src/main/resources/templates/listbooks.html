@@ -48,10 +48,12 @@ xmlns:th="http://www.thymeleaf.org">
                 <button type="submit">
                    Delete
                 </button>
+                <a th:href="'/review/'+${book.getId()}"><button type="button">Add Review</button></a>
+                <a th:href="'/review/get/'+${book.getId()}"><button type="button">Show Reviews</button></a>
             </form>
             <form  th:method="POST" th:action="@{/books}">
             <input type="radio" name="bookIsbn" th:value="${book.getIsbn()}" th:id="${book.getIsbn()}"/>
-            <label th:for="'book' + ${book.getIsbn()}" th:text="'Title: '+ ${book.getTitle()}+' '+'Genre: '+${book.getGenre()}+' '+'Year: '+${book.getYear()}+' '+'Book Store: '+${book.getBookStore().getName()}"></label><br/>
+            <label th:for="'book' + ${book.getIsbn()}" th:text="'Title: '+ ${book.getTitle()}+' '+'Genre: '+${book.getGenre()}+' '+'Year: '+${book.getYear()}"></label><br/>
                 <button type="submit">Submit</button>
             </form>
 
@@ -60,13 +62,7 @@ xmlns:th="http://www.thymeleaf.org">
             <button th:class="form-container">Add Book</button>
         </a>
     </div>
-    <th:block th:each="genre:${genres}">
-        <ul>
-            <h1 th:text="${genre.getKey()}"></h1>
-            <li th:each="title:${genre.getValue()}" th:text="${title}">
-            </li>
-        </ul>
-    </th:block>
+
     <th:block th:if="${hasError}">
         <div th:text="${error}" class="text-danger"></div>
     </th:block>

@@ -2,14 +2,14 @@ package mk.finki.ukim.mk.lab.service.impl;
 
 import mk.finki.ukim.mk.lab.model.Author;
 import mk.finki.ukim.mk.lab.model.Book;
-import mk.finki.ukim.mk.lab.repository.AuthorRepository;
-import mk.finki.ukim.mk.lab.repository.BookRepository;
+import mk.finki.ukim.mk.lab.model.BookStore;
+import mk.finki.ukim.mk.lab.repository.jpa.AuthorRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.BookRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.BookStoreRepository;
 import mk.finki.ukim.mk.lab.service.BookService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,6 +17,13 @@ import java.util.stream.Collectors;
 public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    private final BookStoreRepository bookStoreRepository;
+
+    public BookServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository,BookStoreRepository bookStoreRepository) {
+        this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
+        this.bookStoreRepository=bookStoreRepository;
+    }
 
     @Override
     public List<Book> listBooks() {
@@ -25,9 +32,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Author addAuthorToBook(Long authorId, String isbn) {
-        Author author=authorRepository.findById(authorId).orElse(null);
+        Author author= authorRepository.findById(authorId).orElse(null);
         Book book=bookRepository.findByIsbn(isbn);
-       return bookRepository.addAuthorToBook(author,book);
+        List<Book>bookList=bookRepository.findAll();
+        if (author != null)
+        {
+            book.getAuthors().remove(author);
+            book.getAuthors().add(author);
+        }
+        bookList.removeIf(i-> i.getIsbn().equals(book.getIsbn()));
+        bookList.add(book);
+       return this.authorRepository.save(author);
 
     }
 
@@ -36,15 +51,20 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findByIsbn(isbn);
     }
 
+//    @Override
+//    public Map<String, List<String>> listGenre(List<Book>list) {
+//       return bookRepository.listGenres();
+//
+//    }
     @Override
-    public Map<String, List<String>> listGenre(List<Book>list) {
-       return bookRepository.listGenres();
-
-    }
-    @Override
-    public void DeleteById(Long id)
+    public void DeleteById(Long bookId)
     {
-        this.bookRepository.DeleteById(id);
+        Optional<Book> deleteBook = bookRepository.findById((long)bookId);
+        if (deleteBook.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+
+        bookRepository.delete(deleteBook.get());
     }
 
     @Override
@@ -58,7 +78,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> Save(String title, String isbn, String genre, Integer year, Long Id) {
-        return this.bookRepository.Save(title,isbn,genre,year,Id);
+        BookStore bookStore=bookStoreRepository.findById(Id).get();
+        return Optional.of(this.bookRepository.save(new Book(isbn,title,genre,year,bookStore)));
     }
 
     @Override
@@ -67,8 +88,5 @@ public class BookServiceImpl implements BookService {
     }
 
 
-    public BookServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
-        this.authorRepository = authorRepository;
-        this.bookRepository = bookRepository;
-    }
+
 }
