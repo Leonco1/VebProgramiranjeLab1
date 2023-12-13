@@ -58,9 +58,8 @@ public class BookController {
         List<Book>books=this.bookService.listBooks();
         model.addAttribute("books",books);
         model.addAttribute("BookStores",this.bookStoreService.findAll());
-        if(this.bookService.findById(id).isPresent())
-        {
-            Book book=this.bookService.findById(id).get();
+        Book book=this.bookService.findById(id).get();
+        if(this.bookService.editBook(book.getId(),book.getTitle(),book.getIsbn(),book.getGenre(),book.getYear(),book.getBookStore().getId()).isPresent())        {
             model.addAttribute("book",book);
             return "add";
         }
@@ -82,7 +81,7 @@ public class BookController {
   @PostMapping("/add")
     public String SaveBook(@RequestParam String title, @RequestParam String isbn, @RequestParam String genre, @RequestParam Integer year,@RequestParam Long ID )
   {
-    this.bookService.Save(title,isbn,genre,year,ID);
+    this.bookService.addBook(title,isbn,genre,year,ID);
       return "redirect:/books";
   }
 

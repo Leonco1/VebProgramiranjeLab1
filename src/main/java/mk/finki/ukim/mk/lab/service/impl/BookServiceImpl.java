@@ -9,6 +9,7 @@ import mk.finki.ukim.mk.lab.repository.jpa.BookStoreRepository;
 import mk.finki.ukim.mk.lab.service.BookService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,7 +52,34 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findByIsbn(isbn);
     }
 
-//    @Override
+    @Override
+    public Optional<Book> addBook(String title, String isbn, String genre, int year, long bookStoreId) {
+        Optional<BookStore> foundBookstore = bookStoreRepository.findAll().stream().filter(x -> x.getId().equals(bookStoreId)).findFirst();
+        if (title.isEmpty() || isbn.isEmpty() || genre.isEmpty() || foundBookstore.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        Book newBook = new Book(String.valueOf((long) (Math.random()*1000)),title,genre,year,new ArrayList<>(),foundBookstore.get());
+        bookRepository.save(newBook);
+        return Optional.of(newBook);
+    }
+
+    @Override
+    public Optional<Book> editBook(Long bookId, String title, String isbn, String genre, int year, long bookStoreId) {
+        Optional<BookStore> foundBookstore = bookStoreRepository.findAll().stream().filter(x -> x.getId().equals(bookStoreId)).findFirst();
+        Optional<Book> foundBook = bookRepository.findById((long) bookId);
+        if (foundBook.isEmpty() || foundBookstore.isEmpty() || title.isEmpty() || isbn.isEmpty() || genre.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        foundBook.get().setTitle(title);
+        foundBook.get().setIsbn(isbn);
+        foundBook.get().setGenre(genre);
+        foundBook.get().setYear(year);
+        foundBook.get().setBookStore(foundBookstore.get());
+        bookRepository.save(foundBook.get());
+        return foundBook;
+    }
+
+    //    @Override
 //    public Map<String, List<String>> listGenre(List<Book>list) {
 //       return bookRepository.listGenres();
 //
