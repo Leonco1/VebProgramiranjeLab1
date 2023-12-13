@@ -2,9 +2,11 @@ package mk.finki.ukim.mk.lab.service.impl;
 
 import mk.finki.ukim.mk.lab.model.Author;
 import mk.finki.ukim.mk.lab.model.Book;
+import mk.finki.ukim.mk.lab.model.BookSales;
 import mk.finki.ukim.mk.lab.model.BookStore;
 import mk.finki.ukim.mk.lab.repository.jpa.AuthorRepository;
 import mk.finki.ukim.mk.lab.repository.jpa.BookRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.BookSalesRepository;
 import mk.finki.ukim.mk.lab.repository.jpa.BookStoreRepository;
 import mk.finki.ukim.mk.lab.service.BookService;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,13 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final BookStoreRepository bookStoreRepository;
+    private final BookSalesRepository bookSalesRepository;
 
-    public BookServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository,BookStoreRepository bookStoreRepository) {
+    public BookServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository, BookStoreRepository bookStoreRepository, BookSalesRepository bookSalesRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
         this.bookStoreRepository=bookStoreRepository;
+        this.bookSalesRepository = bookSalesRepository;
     }
 
     @Override
@@ -64,17 +68,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> editBook(Long bookId, String title, String isbn, String genre, int year, long bookStoreId) {
+    public Optional<Book> editBook(Long bookId, String title, String isbn, String genre, int year, long bookStoreId,long bookSalesId) {
         Optional<BookStore> foundBookstore = bookStoreRepository.findAll().stream().filter(x -> x.getId().equals(bookStoreId)).findFirst();
         Optional<Book> foundBook = bookRepository.findById((long) bookId);
+        //Optional<BookSales>bookSales=bookSalesRepository.findAll().stream().filter(i->i.get)
         if (foundBook.isEmpty() || foundBookstore.isEmpty() || title.isEmpty() || isbn.isEmpty() || genre.isEmpty()){
             throw new IllegalArgumentException();
         }
+        Optional<BookSales> foundSales = bookSalesRepository.findAll().stream().filter(x -> x.getId().equals(bookSalesId)).findFirst();
+
         foundBook.get().setTitle(title);
         foundBook.get().setIsbn(isbn);
         foundBook.get().setGenre(genre);
         foundBook.get().setYear(year);
         foundBook.get().setBookStore(foundBookstore.get());
+        foundBook.get().setBookSales(foundSales.get());
+
         bookRepository.save(foundBook.get());
         return foundBook;
     }

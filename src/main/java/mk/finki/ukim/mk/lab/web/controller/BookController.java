@@ -42,6 +42,7 @@ public class BookController {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
+
         return "listbooks";
     }
     @PostMapping
@@ -59,7 +60,8 @@ public class BookController {
         model.addAttribute("books",books);
         model.addAttribute("BookStores",this.bookStoreService.findAll());
         Book book=this.bookService.findById(id).get();
-        if(this.bookService.editBook(book.getId(),book.getTitle(),book.getIsbn(),book.getGenre(),book.getYear(),book.getBookStore().getId()).isPresent())        {
+        if(this.bookService.editBook(book.getId(),book.getTitle(),book.getIsbn(),book.getGenre(),book.getYear(),
+                book.getBookStore().getId(),book.getBookSales().getId()).isPresent())        {
             model.addAttribute("book",book);
             return "add";
         }

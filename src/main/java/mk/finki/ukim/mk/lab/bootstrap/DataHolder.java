@@ -3,13 +3,16 @@ package mk.finki.ukim.mk.lab.bootstrap;
 import jakarta.annotation.PostConstruct;
 import mk.finki.ukim.mk.lab.model.Author;
 import mk.finki.ukim.mk.lab.model.Book;
+import mk.finki.ukim.mk.lab.model.BookSales;
 import mk.finki.ukim.mk.lab.model.BookStore;
 
 import mk.finki.ukim.mk.lab.repository.jpa.AuthorRepository;
 import mk.finki.ukim.mk.lab.repository.jpa.BookRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.BookSalesRepository;
 import mk.finki.ukim.mk.lab.repository.jpa.BookStoreRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,11 +24,13 @@ public class DataHolder {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final BookStoreRepository bookStoreRepository;
+    private final BookSalesRepository bookSalesRepository;
 
-    public DataHolder(BookRepository bookRepository, AuthorRepository authorRepository, BookStoreRepository bookStoreRepository) {
+    public DataHolder(BookRepository bookRepository, AuthorRepository authorRepository, BookStoreRepository bookStoreRepository, BookSalesRepository bookSalesRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.bookStoreRepository = bookStoreRepository;
+        this.bookSalesRepository = bookSalesRepository;
     }
 
     @PostConstruct
@@ -33,7 +38,7 @@ public class DataHolder {
         List<Author> authors = new ArrayList<>();
         List<Book> books = new ArrayList<>();
         List<BookStore> bookStores = new ArrayList<>();
-
+        List<BookSales> bookSales=new ArrayList<>();
         if (authorRepository.count() == 0){
             authors.add(new Author(
                     "William",
@@ -65,7 +70,14 @@ public class DataHolder {
 
             authorRepository.saveAll(authors);
         }
-
+        if(bookSalesRepository.count()==0)
+        {
+            bookSales.add(new BookSales(1));
+            bookSales.add(new BookSales(2));
+            bookSales.add(new BookSales(3));
+            bookSales.add(new BookSales(4));
+            bookSalesRepository.saveAll(bookSales);
+        }
         if (bookStoreRepository.count() == 0){
             bookStores.add(new BookStore(
                     "Prosvetno Delo",
@@ -100,13 +112,14 @@ public class DataHolder {
         if (bookRepository.count() == 0){
             authors = authorRepository.findAll();
             bookStores=bookStoreRepository.findAll();
+            bookSales=bookSalesRepository.findAll();
             books.add(new Book(
                     "978-0-316-03859-9",
                     "Hamlet",
                     "Tragedy",
                     1600,
                     new ArrayList<Author>(Arrays.asList(authors.get(0),authors.get(1))),
-                    bookStores.get(0)
+                    bookStores.get(0),bookSales.get(1)
             ));
             books.add(new Book(
                     "978-1-250-04657-8",
@@ -114,7 +127,7 @@ public class DataHolder {
                     "Romance",
                     1816,
                     new ArrayList<Author>(Arrays.asList(authors.get(1),authors.get(2))),
-                    bookStores.get(1)
+                    bookStores.get(1),bookSales.get(2)
             ));
             books.add(new Book(
                     "978-0-553-21361-4",
@@ -122,7 +135,7 @@ public class DataHolder {
                     "Bildungsroman",
                     1861,
                     new ArrayList<Author>(Arrays.asList(authors.get(2),authors.get(3))),
-                    bookStores.get(2)
+                    bookStores.get(2),bookSales.get(3)
             ));
             books.add(new Book(
                     "978-0-06-112008-4",
@@ -130,7 +143,7 @@ public class DataHolder {
                     "Detective Fiction",
                     1934,
                     new ArrayList<Author>(Arrays.asList(authors.get(3),authors.get(4))),
-                    bookStores.get(3)
+                    bookStores.get(3),bookSales.get(1)
             ));
             books.add(new Book(
                     "978-0-451-52478-1",
@@ -138,7 +151,7 @@ public class DataHolder {
                     "Magical Realism",
                     1967,
                     new ArrayList<Author>(Collections.singletonList(authors.get(4))),
-                    bookStores.get(4)
+                    bookStores.get(4),bookSales.get(2)
             ));
             books.add(new Book(
                     "978-0-451-52478-2",
@@ -146,7 +159,7 @@ public class DataHolder {
                     "Magical Realism",
                     1967,
                     new ArrayList<Author>(Collections.singletonList(authors.get(1))),
-                    bookStores.get(0)
+                    bookStores.get(0),bookSales.get(0)
             ));
             books.add(new Book(
                     "978-0-451-52478-3",
@@ -154,7 +167,7 @@ public class DataHolder {
                     "Magical Realism",
                     1600,
                     new ArrayList<Author>(Collections.singletonList(authors.get(2))),
-                    bookStores.get(3)
+                    bookStores.get(3),bookSales.get(0)
             ));
             bookRepository.saveAll(books);
         }

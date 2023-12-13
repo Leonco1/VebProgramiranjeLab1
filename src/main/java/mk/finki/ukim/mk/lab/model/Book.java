@@ -32,11 +32,25 @@ public class Book {
     private BookStore bookStore;
     @OneToMany(mappedBy = "book")
     private List<Review> reviews;
-
+        @ManyToOne
+        private BookSales bookSales;
 
     public Book() {
     }
 
+    public Book(String isbn, String title, String genre, int year, List<Author> authors, BookStore bookStore,BookSales bookSales) {
+        this.isbn = isbn;
+        this.title = title;
+        this.genre = genre;
+        this.year = year;
+        this.authors = authors;
+        this.bookStore = bookStore;
+        this.bookSales=bookSales;
+    }
+
+    public Book(String isbn, String title, String genre, Integer year, BookStore bookStore) {
+
+    }
     public Book(String isbn, String title, String genre, int year, List<Author> authors, BookStore bookStore) {
         this.isbn = isbn;
         this.title = title;
@@ -44,9 +58,5 @@ public class Book {
         this.year = year;
         this.authors = authors;
         this.bookStore = bookStore;
-    }
-
-    public Book(String isbn, String title, String genre, Integer year, BookStore bookStore) {
-
     }
 }

@@ -81,9 +81,9 @@ public String listAuthors(HttpServletRequest req, Model model)
         return "add-author";
     }
     @PostMapping("/add-author")
-    public String SaveAuthor(@RequestParam Long Id, @RequestParam String name, @RequestParam String surname, @RequestParam String biography,@RequestParam LocalDate localDate)
+    public String SaveAuthor(@RequestParam Long Id, @RequestParam String name, @RequestParam String surname, @RequestParam String biography,@RequestParam LocalDate time)
     {
-        this.authorService.Save(Id,name,surname,biography,localDate);
+        this.authorService.Save(Id,name,surname,biography,time);
         return "redirect:/author";
     }
 

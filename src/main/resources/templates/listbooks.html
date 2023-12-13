@@ -53,7 +53,8 @@ xmlns:th="http://www.thymeleaf.org">
             </form>
             <form  th:method="POST" th:action="@{/books}">
             <input type="radio" name="bookIsbn" th:value="${book.getIsbn()}" th:id="${book.getIsbn()}"/>
-            <label th:for="'book' + ${book.getIsbn()}" th:text="'Title: '+ ${book.getTitle()}+' '+'Genre: '+${book.getGenre()}+' '+'Year: '+${book.getYear()}"></label><br/>
+            <label th:for="'book' + ${book.getIsbn()}" th:text="'Title: '+ ${book.getTitle()}+' '+'Genre: '+${book.getGenre()}+' '+
+            'Year: '+${book.getYear()}+' Copies sold: '+${book.getBookSales().getCopies_sold()}+' Date Sold: '+${book.getBookSales().getDate()}"></label><br/>
                 <button type="submit">Submit</button>
             </form>
 

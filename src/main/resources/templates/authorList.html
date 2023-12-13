@@ -47,7 +47,7 @@
         </form>
         <form th:method="POST" th:action="@{/author}">
     <input type="radio" name="authorId" th:value="${author.getId()}" th:id="${author.getId()}"/>
-    <label th:for="'author' + ${author.getId()}" th:text="${author.getAuthorFullname()}"></label><br/>
+    <label th:for="'author' + ${author.getId()}" th:text="${author.getAuthorFullname().getName()}+' '+${author.getAuthorFullname().getSurname()}"></label><br/>
             <input type='submit' value='Add author'>
         </form>
     </th:block>
